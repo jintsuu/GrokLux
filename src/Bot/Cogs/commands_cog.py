@@ -5,7 +5,7 @@ from Config.config import LOL_VERSION
 
 
 class CommandsCog(commands.Cog):
-    def __init__(self, bot: commands.Bot):
+    def __init__(self, bot: commands.Bot, database: DatabaseHandler):
         self.bot = bot
 
     @commands.command(aliases=['Evasion', 'jax'])

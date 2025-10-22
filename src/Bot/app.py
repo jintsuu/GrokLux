@@ -36,7 +36,7 @@ class App(commands.Bot):
         await self.add_cog(OwnerCog(bot=self, database=self.database, logger=self.logger))
         await self.add_cog(WinrateCog(bot=self, winrate_fetcher=self.winrate_fetcher, logger=self.logger))
         await self.add_cog(DMCog(bot=self, winrate_fetcher=self.winrate_fetcher))
-        await self.add_cog(CommandsCog(bot=self))
+        await self.add_cog(CommandsCog(bot=self, database=self.database))
         await self.add_cog(LeaderboardCog(bot=self, database=self.database))
         await self.add_cog(DeepseekCog(bot=self, database=self.database, logger=self.logger))
         self.logger.info("Finished initialising cogs.")
