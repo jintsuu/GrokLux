@@ -44,7 +44,8 @@ class DatabaseHandler():
         with sqlite3.connect(self.database) as con:
             cur = con.cursor()
             res = cur.execute('SELECT * FROM Subs WHERE user_id=? AND server_id=?',(user_id,server_id)).fetchall()
-
+            self.logger.debug(f"Fetched {res} from function fetch_gwen_sub")
+            
             return True if res else False
     
     def fetch_blacklist(self, user_id: int, server_id: int) -> bool:
@@ -53,6 +54,7 @@ class DatabaseHandler():
         with sqlite3.connect(self.database) as con:
             cur = con.cursor()
             res = cur.execute('SELECT * FROM Blacklist WHERE user_id=? AND server_id=?',(user_id, server_id)).fetchall()
+            self.logger.debug(f"Fetched {res} from function fetch_blacklist")
             
             return True if res else False
         
@@ -62,6 +64,7 @@ class DatabaseHandler():
         with sqlite3.connect(self.database) as con:
             cur = con.cursor()
             res = cur.execute('SELECT * FROM Quote WHERE server_id=?',(server_id,)).fetchall()
+            self.logger.debug(f"Fetched {res} from function fetch_quote")
             
             return True if res else False
         
@@ -70,14 +73,20 @@ class DatabaseHandler():
         
         with sqlite3.connect(self.database) as con:
             cur = con.cursor()
-            return cur.execute('SELECT * FROM Blacklist').fetchall()
+            res = cur.execute('SELECT * FROM Blacklist').fetchall()
+            self.logger.debug(f"Fetched {res} from function _fetch_entire_blacklist")
+            
+            return res
     
     def _fetch_all_subs(self):
         """Return everything from Subs table."""
         
         with sqlite3.connect(self.database) as con:
             cur = con.cursor()
-            return cur.execute('SELECT * FROM Subs').fetchall()
+            res = cur.execute('SELECT * FROM Subs').fetchall()
+            self.logger.debug(f"Fetched {res} from function _fetch_all_subs")
+            
+            return res
     
     def add_to_gwen_sub(self, user_id: int, server_id: int) -> None:
         """Add user to the subscribed user database"""
@@ -85,6 +94,8 @@ class DatabaseHandler():
         with sqlite3.connect(self.database) as con:
             cur = con.cursor()
             cur.execute('INSERT INTO Subs(user_id, server_id) VALUES(?,?)', (user_id, server_id))
+            
+            self.logger.debug(f"Executed function add_to_gwen_sub with arguments {user_id=}, {server_id=}")
         
     def add_to_blacklist(self, user_id: int, server_id: int) -> None:
         """Add user to the blacklist."""
@@ -93,12 +104,16 @@ class DatabaseHandler():
             cur = con.cursor()
             cur.execute('INSERT INTO Blacklist(user_id, server_id) VALUES(?,?)', (user_id, server_id))
             
+            self.logger.debug(f"Executed function add_to_blacklist with arguments {user_id=}, {server_id=}")
+            
     def add_to_quote(self, server_id: int) -> None:
         """Add server to quote"""
         
         with sqlite3.connect(self.database) as con:
             cur = con.cursor()
             cur.execute('INSERT INTO Quote(server_id) VALUES(?)', (server_id,))
+            
+            self.logger.debug(f"Executed function add_to_quote with arguments {server_id=}")
      
     def remove_from_gwen_sub(self, user_id: int, server_id: int) -> bool:
         """Remove user from GwenBot subscription. Return true if successfull else false."""
@@ -112,6 +127,7 @@ class DatabaseHandler():
                 return False
             
             cur.execute('DELETE FROM Subs WHERE user_id=? AND server_id=?', (user_id, server_id))
+            self.logger.debug(f"Executed function remove_from_gwen_sub with arguments {user_id=}, {server_id=}")
             return True
             
     
@@ -122,6 +138,7 @@ class DatabaseHandler():
             cur = con.cursor()
             
             cur.execute('DELETE FROM Blacklist WHERE user_id=? AND server_id=?', (user_id, server_id))
+            self.logger.debug(f"Executed function remove_from_blacklist with arguments {user_id=}, {server_id=}")
             
     def remove_from_quote(self, server_id: int) -> None:
         """Remove server from quote"""
@@ -129,22 +146,26 @@ class DatabaseHandler():
         with sqlite3.connect(self.database) as con:
             cur = con.cursor()
             cur.execute('DELETE FROM Quote WHERE server_id=?', (server_id,))
+            
+            self.logger.debug(f"Executed function remove_from_quote with arguments {server_id=}")
 
     def set_amount(self, amount: int) -> None:
         """Set the amount of question marks."""
 
         with sqlite3.connect(self.database) as con:
             cur = con.cursor()
-
             cur.execute('UPDATE Question SET amount=(?)', (amount,))
+            
+            self.logger.debug(f"Executed function set_amount with arguments {amount=}")
 
     def fetch_amount(self) -> int:
         """Fetch the amount of question marks"""
 
         with sqlite3.connect(self.database) as con:
             cur = con.cursor()
-
             res = cur.execute('SELECT amount FROM Question').fetchone()[0]
+            
+            self.logger.debug(f"Executed function fetch_amount with result {res}")
 
             return res
         
@@ -152,12 +173,17 @@ class DatabaseHandler():
         
         with sqlite3.connect(self.database) as con:
             cur = con.cursor()
-
             cur.execute('UPDATE Question SET latest_user=(?)', (user_id,))
+            
+            self.logger.debug(f"Executed function set_latest_user with arguments {user_id}")
 
     def fetch_latest_user(self) -> int:
 
         with sqlite3.connect(self.database) as con:
             cur = con.cursor()
-
-            return cur.execute('SELECT latest_user FROM Question').fetchone()[0]
+            res = cur.execute('SELECT latest_user FROM Question').fetchone()[0]
+            
+            self.logger.debug(f"Executed function fetch_latest_user with result {res}")
+            return res 
+        
+        

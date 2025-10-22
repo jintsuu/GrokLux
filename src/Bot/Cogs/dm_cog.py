@@ -9,7 +9,7 @@ from Config.help_message import HELPMESSAGE, WRHELPMESSAGE
 class DMCog(commands.Cog):
     def __init__(self, bot: commands.Bot, winrate_fetcher: WinrateFetcher):
         self.bot = bot
-        self.winrate_fetcher = WinrateFetcher()
+        self.winrate_fetcher = winrate_fetcher
         
     @commands.command()
     async def list(self, ctx: commands.Context):

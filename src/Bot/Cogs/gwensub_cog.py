@@ -1,11 +1,13 @@
 from discord.ext import commands
+from logging import Logger
 
 from Database.database import DatabaseHandler
 
 class GwensubCog(commands.Cog):
-    def __init__(self, bot: commands.Bot, database: DatabaseHandler):
+    def __init__(self, bot: commands.Bot, database: DatabaseHandler, logger: Logger):
         self.bot = bot
         self.database = database
+        self.logger = logger
         
     @commands.command(name='GwenAdd', aliases=['add', 'gwenadd'])
     async def gwen_add(self, ctx: commands.Context) -> None:
@@ -26,6 +28,7 @@ class GwensubCog(commands.Cog):
         if not self.database.fetch_gwen_sub(ctx.author.id, ctx.guild.id):
             self.database.add_to_gwen_sub(ctx.author.id, ctx.guild.id)
             await ctx.send('Successfully subscribed to GwenBot.')
+            self.logger.debug(f"Added user {ctx.author.id} to GwenSubs in guild {ctx.guild.id}") # type: ignore
             return
         
         await ctx.send('You are already subscribed to GwenBot.')
@@ -42,6 +45,7 @@ class GwensubCog(commands.Cog):
         if self.database.fetch_gwen_sub(ctx.author.id, ctx.guild.id):
             self.database.remove_from_gwen_sub(ctx.author.id, ctx.guild.id)
             await ctx.send('Successfully removed from the GwenBot Subscription.')
+            self.logger.debug(f"Removed user {ctx.author.id} from GwenSubs in guild {ctx.guild.id}") # type: ignore
             return
         
         await ctx.send('You are not currently subscribed to GwenBot.', ephemeral=True)
@@ -79,7 +83,7 @@ class GwensubCog(commands.Cog):
 
     @commands.has_permissions(kick_members=True)    
     @commands.command(name='quote')
-    async def quote(self, ctx: commands.Context, id=None) -> None:
+    async def quote(self, ctx: commands.Context) -> None:
         """Command to add/undo Quote"""
         
         if ctx.guild is None:
@@ -89,9 +93,11 @@ class GwensubCog(commands.Cog):
         if self.database.fetch_quote(ctx.guild.id):
             self.database.remove_from_quote(ctx.guild.id)
             await ctx.send('Gwen will now respond to chat.')
+            self.logger.warning(f"Removed quote from guild {ctx.guild.id}")
             return
         
         self.database.add_to_quote(ctx.guild.id)
+        self.logger.warning(f"Enabled quote in guild {ctx.guild.id}")
         await ctx.send('Gwen will no longer respond to chat.')
         
         
@@ -119,6 +125,7 @@ class GwensubCog(commands.Cog):
             return
         
         self.database.remove_from_gwen_sub(id, ctx.guild.id)
+        self.logger.debug(f"Forcefully removed user {user_id} from GwenSub in guild {ctx.guild.id} by {ctx.author.id}")
         await ctx.send('User removed from GwenBot subscription.')
         
         
@@ -144,6 +151,7 @@ class GwensubCog(commands.Cog):
             self.database.add_to_blacklist(user_id, ctx.guild.id)
             self.database.remove_from_gwen_sub(user_id, ctx.guild.id)
             await ctx.send('User successfully added to the Blacklist.')
+            self.logger.debug(f"Blacklisted user {user_id} from GwenSub in guild {ctx.guild.id} by {ctx.author.id}")
             return
         
         
@@ -171,6 +179,7 @@ class GwensubCog(commands.Cog):
         if self.database.fetch_blacklist(user_id, ctx.guild.id):
             self.database.remove_from_blacklist(user_id, ctx.guild.id)
             await ctx.send('User successfully removed from the Blacklist.')
+            self.logger.debug(f"Removed user {user_id} from blacklist in guild {ctx.guild.id} by {ctx.author.id}")
             return
         
         await ctx.send('User is not Blacklisted.')

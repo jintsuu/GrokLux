@@ -29,13 +29,15 @@ class App(commands.Bot):
         from Bot.Cogs.commands_cog import CommandsCog
         from Bot.Cogs.leaderboard_cog import LeaderboardCog
         
-        await self.bot.add_cog(ListenerCog(self.bot, self.database))
-        await self.bot.add_cog(GwensubCog(self.bot, self.database))
-        await self.bot.add_cog(OwnerCog(self.bot, self.database))
-        await self.bot.add_cog(WinrateCog(self.bot, self.winrate_fetcher))
+        self.logger.info("Initialising cogs.")
+        await self.bot.add_cog(ListenerCog(self.bot, self.database, self.logger))
+        await self.bot.add_cog(GwensubCog(self.bot, self.database, self.logger))
+        await self.bot.add_cog(OwnerCog(self.bot, self.database, self.logger))
+        await self.bot.add_cog(WinrateCog(self.bot, self.winrate_fetcher, self.logger))
         await self.bot.add_cog(DMCog(self.bot, self.winrate_fetcher))
-        await self.bot.add_cog(CommandsCog(self.bot, self.database))
+        await self.bot.add_cog(CommandsCog(self.bot))
         await self.bot.add_cog(LeaderboardCog(self.bot, self.database))
+        self.logger.info("Finished initialising cogs.")
             
         
                 

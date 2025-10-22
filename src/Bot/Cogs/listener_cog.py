@@ -1,4 +1,5 @@
 from random import randint
+from logging import Logger
 
 import discord
 
@@ -9,9 +10,10 @@ from Config.config import MESSAGE_CHANNEL, DEFAULT_CHANNEL, PREFIX, OWNER_ID
 
 
 class ListenerCog(commands.Cog):
-    def __init__(self, bot: commands.Bot, database: DatabaseHandler):
+    def __init__(self, bot: commands.Bot, database: DatabaseHandler, logger: Logger):
         self.bot = bot
         self.database = database
+        self.logger = logger
         
     @commands.Cog.listener("on_message")
     async def on_message(self, msg: discord.Message) -> None:
@@ -23,8 +25,10 @@ class ListenerCog(commands.Cog):
             if msg.content != '?':
                 channel = self.bot.get_channel(DEFAULT_CHANNEL)
                 if not '@' in msg.content:
+                    self.logger.warning(f"User {msg.author.id} sent a non-question mark in the question mark channel.")
                     await channel.send(f'<@341238409311944705> <@281791015411646464> Somebody did a little fucky wuckie >.<!! A small oopsie woopsie uwu! Someone dared ruin the ? chain nya~!!! <@{msg.author.id}> what have you done!! (⁄ ⁄•⁄ω⁄•⁄ ⁄) They dared send "{msg.content}" in our holy channel nya!') # type: ignore
                 else:
+                    self.logger.warning(f"User {msg.author.id} sent a mention in the question mark channel.")
                     await channel.send(f'<@341238409311944705> <@281791015411646464> Somebody did a little fucky wuckie >.<!! A small oopsie woopsie uwu! Someone dared ruin the ? chain nya~!!! <@{msg.author.id}> what have you done!! (⁄ ⁄•⁄ω⁄•⁄ ⁄) They dared use an "@" in our holy channel nya!') # type: ignore
                 return
 
@@ -60,6 +64,7 @@ class ListenerCog(commands.Cog):
                 res = split[0]
                 res = res.replace("$",'')
             
+            self.logger.debug(f"Sent message '{res}' in channel {channel.id} by owner") # type: ignore
             await channel.send(res) # type: ignore
             return
     

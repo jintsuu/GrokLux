@@ -32,9 +32,11 @@ def request(url: str, headers: Dict[str, str] = {'User-Agent': 'Mozilla/5.0'}) -
             response = requests.get(url=url, headers=headers, timeout=10)
         except requests.exceptions.Timeout:
             logger.warning(f"Timeout during request url: {url} with headers {headers}")
+            response.raise_for_status() # type: ignore
         
     if not response.ok: # type: ignore
         logger.warning(f"Response not OK with url: {url} with headers {headers}")
+        response.raise_for_status() # type: ignore
     
     return response # type: ignore
     
