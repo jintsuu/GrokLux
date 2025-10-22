@@ -13,6 +13,12 @@ class WinrateCog(commands.Cog):
         self.winrate_fetcher = winrate_fetcher
         self.logger = logger
         
+        self.beautified_elo_list: dict[str, str] = {'platinum_plus' : 'Plat+',
+                                                    'diamond_2_plus' : 'D2+',
+                                                    'diamond_plus' : 'D+',
+                                                    'master_plus' : "M+",
+                                                    }
+        
     @commands.command(aliases=['winrate'])
     async def wr(self, ctx: commands.Context, champion_name: str, *args: str) -> None:
         self.logger.debug(f"Calling winrate in channel {ctx.channel.id} for champion {champion_name} with arguments {args}")
@@ -27,6 +33,7 @@ class WinrateCog(commands.Cog):
         
         if result.champ.role:
             if result.champ.elo:
+                result.champ.beautify_elo(self.beautified_elo_list)
                 await ctx.send(f"{result.champ.name.capitalize()} has a {result.win_rate} winrate in {result.champ.elo} in {result.champ.role}{result.final_string}.")
                 return
             

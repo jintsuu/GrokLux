@@ -6,6 +6,11 @@ class Champion:
     role: str | None = field(default="")
     elo: str | None = field(default="")
     opponent: str | None = field(default="")
+    
+    def beautify_elo(self, beautified_elo_list: dict[str, str]) -> None:
+        for key, value in beautified_elo_list.items():
+            if self.elo == key:
+                self.elo = value
 
 
 @dataclass

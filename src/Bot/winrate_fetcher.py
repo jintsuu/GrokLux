@@ -35,7 +35,6 @@ class WinrateFetcher:
         self.ugg_div_values: list[str] = ['shinggo', 'good', 'okay', 'volxd', 'meh', 'great'] # Don't ask
         self.ugg_div_values_reversed: list[str] = list(reversed(self.ugg_div_values))
         
-        
 
     def _get_champion_list(self) -> list[str]:
         """Gets list of champions."""
@@ -46,6 +45,7 @@ class WinrateFetcher:
         champion_response = request(url)
         champion_json: dict[str, str] = json.loads(champion_response.text)
         return [i.lower() for i in champion_json['data']]
+         
     
     def _alternative_elo_check(self, elo: str) -> str:
         """Checks if elo in alternative elos
@@ -210,6 +210,8 @@ class WinrateFetcher:
         
         final_string = f" with {match_count} matches played, a {pick_rate} pick rate and a {ban_rate} ban rate" # type: ignore
         self.logger.debug(f"Final string for {champ=} : {final_string}")
+        
+        
         
         result = Result(champ=champ, 
                         win_rate=win_rate, 
