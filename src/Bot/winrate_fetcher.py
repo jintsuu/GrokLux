@@ -95,6 +95,7 @@ class WinrateFetcher:
         
         for value in self.ugg_div_values:
             win_rate = soup.find('div', {'class':f'text-[20px] max-sm:text-[16px] max-xs:text-[14px] font-extrabold {value}-tier'}) # type: ignore
+            self.logger.debug(f"{win_rate=} at ugg value {value}")
             if win_rate is not None:
                 break
         
