@@ -130,7 +130,7 @@ class WinrateFetcher:
                 except (TypeError, IndexError):
                     continue
             
-            win_rate = win_rate.text # type: ignore
+            win_rate = win_rate[0].text # type: ignore
         
         return win_rate if win_rate is not None else None
     
