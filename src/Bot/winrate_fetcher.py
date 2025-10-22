@@ -150,7 +150,6 @@ class WinrateFetcher:
             try:
                 match_count: str = soup.find_all('div', {'class':'text-[20px] max-sm:text-[16px] max-xs:text-[14px] font-extrabold'})[3].text
             except IndexError:
-                self.logger.debug(f"{with_opponent=}, {soup}")
                 return None
         else:
             match_count: str = soup.find('div', {'class':'text-[20px] max-sm:text-[16px] max-xs:text-[14px] font-extrabold'}).text # type: ignore
@@ -196,7 +195,7 @@ class WinrateFetcher:
         soup = BeautifulSoup(web, "html.parser") # type: ignore
         
         win_rate = self._get_winrate(soup)
-        match_count = self._get_match_count(soup, with_opponent=True)
+        match_count = self._get_match_count(soup, with_opponent=False)
         pick_rate = self._get_pick_rate(soup)
         ban_rate = self._get_ban_rate(soup)
         
@@ -228,7 +227,7 @@ class WinrateFetcher:
         soup = BeautifulSoup(web, "html.parser") # type: ignore
         
         win_rate = self._get_winrate(soup)
-        match_count = self._get_match_count(soup, with_opponent=False)
+        match_count = self._get_match_count(soup, with_opponent=True)
         
         if not match_count:
             self.logger.error(f"Unable to fetch match count for {champ=} with {url=}")
