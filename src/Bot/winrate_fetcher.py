@@ -80,11 +80,11 @@ class WinrateFetcher:
             role_str: str = f"{champ.role}"
         
         if role_str:
-            self.logger.debug(f"Created url https://u.gg/lol/champions/{champ}/build/{role_str}?{elo_str}{opponent_str}")
-            return f"https://u.gg/lol/champions/{champ}/build/{role_str}?{elo_str}{opponent_str}"
+            self.logger.debug(f"Created url https://u.gg/lol/champions/{champ.name}/build/{role_str}?{elo_str}{opponent_str}")
+            return f"https://u.gg/lol/champions/{champ.name}/build/{role_str}?{elo_str}{opponent_str}"
         
-        self.logger.debug(f"Created url https://u.gg/lol/champions/{champ}/build?{elo_str}{opponent_str}")
-        return f"https://u.gg/lol/champions/{champ}/build?{elo_str}{opponent_str}"
+        self.logger.debug(f"Created url https://u.gg/lol/champions/{champ.name}/build?{elo_str}{opponent_str}")
+        return f"https://u.gg/lol/champions/{champ.name}/build?{elo_str}{opponent_str}"
     
     def _get_winrate(self, soup: BeautifulSoup) -> float | None:
         """Fetches the winrate of a champ
