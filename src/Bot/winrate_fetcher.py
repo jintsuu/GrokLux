@@ -129,7 +129,7 @@ class WinrateFetcher:
                 except ValueError:
                     int(win_rate[1].text[0]) #type: ignore
                     win_rate = win_rate[1].text # type: ignore
-                except TypeError:
+                except (TypeError, IndexError):
                     continue
             
             win_rate = win_rate.text # type: ignore
