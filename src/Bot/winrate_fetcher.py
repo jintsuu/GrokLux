@@ -210,7 +210,7 @@ class WinrateFetcher:
         if not ban_rate:
             self.logger.error(f"Unable to fetch ban_rate for {champ=} with {url=}")
         
-        final_string = f" with {match_count} matches played, a {pick_rate} pick rate and a {ban_rate} ban rate"
+        final_string = f" against {champ.opponent} with {match_count} matches played, a {pick_rate} pick rate and a {ban_rate} ban rate"
         self.logger.debug(f"Final string for {champ=} : {final_string}")
         
         result = Result(champ=champ, 
@@ -260,7 +260,7 @@ class WinrateFetcher:
                 champ.elo = arg
             
             
-        if champ.opponent:
+        if not champ.opponent:
             return self._get_all(champ)
         
         return self._get_all_no_opponent(champ)
