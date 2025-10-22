@@ -154,7 +154,7 @@ class WinrateFetcher:
 
     def _get_all(self, champ: Champion) -> Result:
         url = self._get_url(champ)
-        web = request(url)
+        web = request(url).content
         
         soup = BeautifulSoup(web, "html.parser") # type: ignore
         
@@ -186,7 +186,7 @@ class WinrateFetcher:
         
     def _get_all_no_opponent(self, champ: Champion) -> Result:
         url = self._get_url(champ)
-        web = request(url)
+        web = request(url).content
         
         soup = BeautifulSoup(web, "html.parser") # type: ignore
         
