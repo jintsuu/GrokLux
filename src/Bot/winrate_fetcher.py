@@ -120,7 +120,7 @@ class WinrateFetcher:
         except (ValueError, TypeError, AttributeError):
             win_rate = None
             for value in self.ugg_div_values:
-                win_rate = soup.find_all('div', {'class':f'text-[20px] max-sm:text-[16px] max-xs:text-[14px] font-extrabold {value}-tier'}) # type: ignore
+                win_rate = soup.find('div', {'class':f'text-[20px] max-sm:text-[16px] max-xs:text-[14px] font-extrabold {value}-tier'}) # type: ignore
                 try:
                     int(win_rate[0].text[0]) #type: ignore
                     win_rate = win_rate[0] # type: ignore
@@ -130,7 +130,7 @@ class WinrateFetcher:
                 except (TypeError, IndexError):
                     continue
             
-            win_rate = win_rate[0].text # type: ignore
+            win_rate = win_rate.text # type: ignore
         
         return win_rate if win_rate is not None else None
     
