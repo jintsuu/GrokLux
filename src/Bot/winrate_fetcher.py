@@ -150,6 +150,7 @@ class WinrateFetcher:
             try:
                 match_count: str = soup.find_all('div', {'class':'text-[20px] max-sm:text-[16px] max-xs:text-[14px] font-extrabold'})[3].text
             except IndexError:
+                self.logger.debug(f"{with_opponent=}, {soup}")
                 return None
         else:
             match_count: str = soup.find('div', {'class':'text-[20px] max-sm:text-[16px] max-xs:text-[14px] font-extrabold'}).text # type: ignore
