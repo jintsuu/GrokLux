@@ -125,10 +125,10 @@ class WinrateFetcher:
                 win_rate = soup.find_all('div', {'class':f'text-[20px] max-sm:text-[16px] max-xs:text-[14px] font-extrabold {value}-tier'}) # type: ignore
                 try:
                     int(win_rate[0].text[0]) #type: ignore
-                    win_rate = win_rate[0].text # type: ignore
+                    win_rate = win_rate[0] # type: ignore
                 except ValueError:
                     int(win_rate[1].text[0]) #type: ignore
-                    win_rate = win_rate[1].text # type: ignore
+                    win_rate = win_rate[1] # type: ignore
                 except (TypeError, IndexError):
                     continue
             
