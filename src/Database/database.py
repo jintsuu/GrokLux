@@ -191,7 +191,7 @@ class DatabaseHandler():
     
     def add_context_ds(self, user_id: int, user_message: str, reasoning_content: str) -> None:
         
-        with sqlite3.connect('GwenUsers') as con:
+        with sqlite3.connect(self.database) as con:
             cur = con.cursor()
             cur.execute('INSERT INTO Gwenseek(user_id, user_message, reasoning_content) VALUES(?,?,?)', (user_id, user_message, reasoning_content))
             
@@ -199,7 +199,7 @@ class DatabaseHandler():
             
     def clear_context_ds(self, user_id: int) -> None:
         
-        with sqlite3.connect('GwenUsers') as con:
+        with sqlite3.connect(self.database) as con:
             cur = con.cursor()
             cur.execute('DELETE FROM Gwenseek WHERE user_id=?', (user_id,))
             
@@ -207,7 +207,7 @@ class DatabaseHandler():
             
     def delete_oldest_context_ds(self, user_id: int) -> None:
         
-        with sqlite3.connect('GwenUsers') as con:
+        with sqlite3.connect(self.database) as con:
             cur = con.cursor()
             cur.execute('DELETE FROM Gwenseek WHERE id = (SELECT MIN(id) FROM Gwenseek WHERE user_id = ?)', (user_id,))
             
@@ -215,7 +215,7 @@ class DatabaseHandler():
     
     def fetch_user_count_ds(self, user_id: int):
         
-        with sqlite3.connect('GwenUsers') as con:
+        with sqlite3.connect(self.database) as con:
             cur = con.cursor()
             res = cur.execute('SELECT COUNT(*) FROM Gwenseek WHERE user_id=?', (user_id,)).fetchone()
             
@@ -224,7 +224,7 @@ class DatabaseHandler():
     
     def fetch_context_ds(self, user_id: int):
         
-        with sqlite3.connect('GwenUsers') as con:
+        with sqlite3.connect(self.database) as con:
             cur = con.cursor()
             res = cur.execute('SELECT * FROM Gwenseek WHERE user_id=? ORDER BY id', (user_id,)).fetchall()
             
