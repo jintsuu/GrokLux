@@ -40,4 +40,9 @@ class WinrateCog(commands.Cog):
             await ctx.send(f"{result.champ.name.capitalize()} has a {result.win_rate} winrate in {result.champ.role}{result.final_string}.")
             return
         
+        if result.champ.elo:
+                result.champ.beautify_elo(self.beautified_elo_list)
+                await ctx.send(f"{result.champ.name.capitalize()} has a {result.win_rate} winrate in {result.champ.elo} {result.final_string}.")
+                return
+            
         await ctx.send(f"{result.champ.name.capitalize()} has a {result.win_rate} winrate{result.final_string}.")
