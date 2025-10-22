@@ -188,7 +188,7 @@ class WinrateFetcher:
         
         return ban_rate
 
-    def _get_all(self, champ: Champion) -> Result:
+    def _get_all_no_opponent(self, champ: Champion) -> Result:
         url = self._get_url(champ)
         web = request(url).content
         
@@ -208,7 +208,7 @@ class WinrateFetcher:
         if not ban_rate:
             self.logger.error(f"Unable to fetch ban_rate for {champ=} with {url=}")
         
-        final_string = f" against {champ.opponent.capitalize()} with {match_count} matches played, a {pick_rate} pick rate and a {ban_rate} ban rate" # type: ignore
+        final_string = f" with {match_count} matches played, a {pick_rate} pick rate and a {ban_rate} ban rate" # type: ignore
         self.logger.debug(f"Final string for {champ=} : {final_string}")
         
         result = Result(champ=champ, 
@@ -220,7 +220,7 @@ class WinrateFetcher:
         
         return result
         
-    def _get_all_no_opponent(self, champ: Champion) -> Result:
+    def _get_all_with_opponent(self, champ: Champion) -> Result:
         url = self._get_url(champ)
         web = request(url).content
         
@@ -236,7 +236,7 @@ class WinrateFetcher:
                         with_opponent=False,
                         win_rate=win_rate,
                         match_count=match_count,
-                        final_string=f" with {match_count} matches played" 
+                        final_string=f" against {champ.opponent.capitalize()} with {match_count} matches played" # type: ignore
                         )
         
         return result
@@ -261,4 +261,4 @@ class WinrateFetcher:
         if not champ.opponent:
             return self._get_all_no_opponent(champ)
             
-        return self._get_all(champ)
+        return self._get_all_with_opponent(champ)
