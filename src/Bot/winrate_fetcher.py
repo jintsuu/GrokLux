@@ -56,7 +56,7 @@ class WinrateFetcher:
         Returns:
             str: input elo if not found, else elo
         """
-        for key, value in self.alternative_elos:
+        for key, value in self.alternative_elos.items():
             if elo in value:
                 return key
         
