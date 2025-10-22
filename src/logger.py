@@ -62,7 +62,7 @@ class SingletonLogger:
             self.logger.addHandler(file_handler)
             
             if self.debug:
-                debug_log_path = Path(__file__).resolve() / "Logs" / f"log_{datetime.now().strftime('%Y-%m-%d')}_debug.log"
+                debug_log_path = Path(__file__).resolve().parent / "Logs" / f"log_{datetime.now().strftime('%Y-%m-%d')}_debug.log"
                 
                 debug_file_handler = TimedRotatingFileHandler(
                     filename=debug_log_path,
