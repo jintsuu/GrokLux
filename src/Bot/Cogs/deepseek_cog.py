@@ -11,8 +11,8 @@ class DeepseekCog(commands.Cog):
         self.bot = bot
         self.logger = logger
         self.database = database
-        self.token = os.environ['DEEPSEEK_TOKEN']
-        self.deepseek_client = AsyncOpenAI(api_key=self.token, base_url="https://api.deepseek.com")
+        self.__token = os.environ['DEEPSEEK_TOKEN']
+        self.deepseek_client = AsyncOpenAI(api_key=self.__token, base_url="https://api.deepseek.com")
         
     
     async def gwenseekfunc(self, ctx: commands.Context, model: str, original_message: tuple[str, ...]) -> None:

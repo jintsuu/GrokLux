@@ -97,7 +97,6 @@ class WinrateFetcher:
         
         for value in self.ugg_div_values:
             win_rate = soup.find('div', {'class':f'text-[20px] max-sm:text-[16px] max-xs:text-[14px] font-extrabold {value}-tier'}) # type: ignore
-            self.logger.debug(f"{win_rate=} at ugg value {value}")
             if win_rate is not None:
                 break
         
@@ -109,7 +108,6 @@ class WinrateFetcher:
             win_rate = None
             for value in self.ugg_div_values_reversed:
                 win_rate = soup.find('div', {'class':f'text-[20px] max-sm:text-[16px] max-xs:text-[14px] font-extrabold {value}-tier'}) # type: ignore
-                self.logger.debug(f"{win_rate=} at ugg value {value}")
                 if win_rate is not None:
                     break
                 
@@ -210,7 +208,7 @@ class WinrateFetcher:
         if not ban_rate:
             self.logger.error(f"Unable to fetch ban_rate for {champ=} with {url=}")
         
-        final_string = f" against {champ.opponent} with {match_count} matches played, a {pick_rate} pick rate and a {ban_rate} ban rate"
+        final_string = f" against {champ.opponent.capitalize()} with {match_count} matches played, a {pick_rate} pick rate and a {ban_rate} ban rate" # type: ignore
         self.logger.debug(f"Final string for {champ=} : {final_string}")
         
         result = Result(champ=champ, 
@@ -238,7 +236,7 @@ class WinrateFetcher:
                         with_opponent=False,
                         win_rate=win_rate,
                         match_count=match_count,
-                        final_string=f" with {match_count} matches played"
+                        final_string=f" with {match_count} matches played" 
                         )
         
         return result
@@ -261,6 +259,6 @@ class WinrateFetcher:
             
             
         if not champ.opponent:
-            return self._get_all(champ)
-        
-        return self._get_all_no_opponent(champ)
+            return self._get_all_no_opponent(champ)
+            
+        return self._get_all(champ)

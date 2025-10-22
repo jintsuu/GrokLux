@@ -27,10 +27,10 @@ class WinrateCog(commands.Cog):
         
         if result.champ.role:
             if result.champ.elo:
-                await ctx.send(f"{result.champ.name} has a {result.win_rate} winrate in {result.champ.elo} in {result.champ.role}{result.final_string}.")
+                await ctx.send(f"{result.champ.name.capitalize()} has a {result.win_rate} winrate in {result.champ.elo} in {result.champ.role}{result.final_string}.")
                 return
             
-            await ctx.send(f"{result.champ.name} has a {result.win_rate} winrate in {result.champ.role}{result.final_string}.")
+            await ctx.send(f"{result.champ.name.capitalize()} has a {result.win_rate} winrate in {result.champ.role}{result.final_string}.")
             return
         
-        await ctx.send(f"{result.champ.name} has a {result.win_rate} winrate{result.final_string}.")
+        await ctx.send(f"{result.champ.name.capitalize()} has a {result.win_rate} winrate{result.final_string}.")
