@@ -187,3 +187,46 @@ class DatabaseHandler():
             return res 
         
         
+    # Deepseek integration
+    
+    def add_context_ds(self, user_id: int, user_message: str, reasoning_content: str) -> None:
+        
+        with sqlite3.connect('GwenUsers') as con:
+            cur = con.cursor()
+            cur.execute('INSERT INTO Gwenseek(user_id, user_message, reasoning_content) VALUES(?,?,?)', (user_id, user_message, reasoning_content))
+            
+            self.logger.debug(f"Executed function add_context_ds with arguments {user_id=}, {user_message=}, {reasoning_content=}")
+            
+    def clear_context_ds(self, user_id: int) -> None:
+        
+        with sqlite3.connect('GwenUsers') as con:
+            cur = con.cursor()
+            cur.execute('DELETE FROM Gwenseek WHERE user_id=?', (user_id,))
+            
+            self.logger.debug(f"Executed function clear_context_ds with arguments {user_id=}")
+            
+    def delete_oldest_context_ds(self, user_id: int) -> None:
+        
+        with sqlite3.connect('GwenUsers') as con:
+            cur = con.cursor()
+            cur.execute('DELETE FROM Gwenseek WHERE id = (SELECT MIN(id) FROM Gwenseek WHERE user_id = ?)', (user_id,))
+            
+            self.logger.debug(f"Executed function delete_oldest_context_ds with arguments {user_id=}")
+    
+    def fetch_user_count_ds(self, user_id: int):
+        
+        with sqlite3.connect('GwenUsers') as con:
+            cur = con.cursor()
+            res = cur.execute('SELECT COUNT(*) FROM Gwenseek WHERE user_id=?', (user_id,)).fetchone()
+            
+            self.logger.debug(f"Executed function fetch_user_count_ds with arguments {user_id=} and {res=}")
+            return res
+    
+    def fetch_context_ds(self, user_id: int):
+        
+        with sqlite3.connect('GwenUsers') as con:
+            cur = con.cursor()
+            res = cur.execute('SELECT * FROM Gwenseek WHERE user_id=? ORDER BY id', (user_id,)).fetchall()
+            
+            self.logger.debug(f"Executed function fetch_context_ds with arguments {user_id=} and {res=}")
+            return res

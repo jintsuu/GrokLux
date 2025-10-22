@@ -28,15 +28,17 @@ class App(commands.Bot):
         from Bot.Cogs.dm_cog import DMCog
         from Bot.Cogs.commands_cog import CommandsCog
         from Bot.Cogs.leaderboard_cog import LeaderboardCog
+        from Bot.Cogs.deepseek_cog import DeepseekCog
         
         self.logger.info("Initialising cogs.")
-        await self.bot.add_cog(ListenerCog(self.bot, self.database, self.logger))
-        await self.bot.add_cog(GwensubCog(self.bot, self.database, self.logger))
-        await self.bot.add_cog(OwnerCog(self.bot, self.database, self.logger))
-        await self.bot.add_cog(WinrateCog(self.bot, self.winrate_fetcher, self.logger))
-        await self.bot.add_cog(DMCog(self.bot, self.winrate_fetcher))
-        await self.bot.add_cog(CommandsCog(self.bot))
-        await self.bot.add_cog(LeaderboardCog(self.bot, self.database))
+        await self.bot.add_cog(ListenerCog(bot=self.bot, database=self.database, logger=self.logger))
+        await self.bot.add_cog(GwensubCog(bot=self.bot, database=self.database, logger=self.logger))
+        await self.bot.add_cog(OwnerCog(bot=self.bot, database=self.database, logger=self.logger))
+        await self.bot.add_cog(WinrateCog(bot=self.bot, winrate_fetcher=self.winrate_fetcher, logger=self.logger))
+        await self.bot.add_cog(DMCog(bot=self.bot, winrate_fetcher=self.winrate_fetcher))
+        await self.bot.add_cog(CommandsCog(bot=self.bot))
+        await self.bot.add_cog(LeaderboardCog(bot=self.bot, database=self.database))
+        await self.bot.add_cog(DeepseekCog(bot=self.bot, database=self.database, logger=self.logger))
         self.logger.info("Finished initialising cogs.")
             
         
