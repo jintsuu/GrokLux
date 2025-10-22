@@ -1,5 +1,4 @@
-LOL_VERSION: str = '15.18.1'  # Change the version to whatever the newest version is. Format: Season.Patch.1
-OWNER_ID: int = 252498411511742464  # Change to your own discord user ID
+OWNER_ID: int = 315403328232357888  # Change to your own discord user ID
 DEFAULT_CHANNEL: int = 410517986256879618  # Default channel that the sendshit 'command' sends to.
 MESSAGE_CHANNEL: int = 1173988767456043028 # Default channel to count messages
-PREFIX: str = '+'  # Bot prefix.
+PREFIX: str = '~'  # Bot prefix.
