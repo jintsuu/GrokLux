@@ -47,7 +47,7 @@ class SingletonLogger:
             
             formatter = Formatter("%(levelname)s : %(asctime)s : %(message)s", datefmt="%y/%m/%d %H:%M:%S")
             
-            log_path = Path(__file__).resolve() / "Logs" / f"log_{datetime.now().strftime('%Y-%m-%d')}.log"
+            log_path = Path(__file__).resolve().parent / "Logs" / f"log_{datetime.now().strftime('%Y-%m-%d')}.log"
             
             file_handler = TimedRotatingFileHandler(
                 filename=log_path,
