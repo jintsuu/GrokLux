@@ -12,6 +12,6 @@ class Champion:
 class Result:
     champ: Champion
     with_opponent: bool
-    win_rate: float | None
-    match_count: int | None
+    win_rate: str | None
+    match_count: str | None
     final_string: str = field(default="")

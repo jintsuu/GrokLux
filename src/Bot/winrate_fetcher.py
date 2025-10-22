@@ -86,7 +86,7 @@ class WinrateFetcher:
         self.logger.debug(f"Created url https://u.gg/lol/champions/{champ.name}/build?{elo_str}{opponent_str}")
         return f"https://u.gg/lol/champions/{champ.name}/build?{elo_str}{opponent_str}"
     
-    def _get_winrate(self, soup: BeautifulSoup) -> float | None:
+    def _get_winrate(self, soup: BeautifulSoup) -> str | None:
         """Fetches the winrate of a champ
         Returns:
             float | None: Winrate if found else None
@@ -98,10 +98,11 @@ class WinrateFetcher:
             self.logger.debug(f"{win_rate=} at ugg value {value}")
             if win_rate is not None:
                 break
+
         
-        return float(win_rate.text.rstrip(win_rate[-1])) if win_rate is not None else None
+        return win_rate.text if win_rate is not None else None
     
-    def _get_match_count(self, soup: BeautifulSoup, with_opponent: bool) -> int | None:
+    def _get_match_count(self, soup: BeautifulSoup, with_opponent: bool) -> str | None:
         """Returns match count of a champ
 
         Args:
@@ -119,9 +120,9 @@ class WinrateFetcher:
         else:
             match_count: str = soup.find('div', {'class':'text-[20px] max-sm:text-[16px] max-xs:text-[14px] font-extrabold'}).text # type: ignore
              
-        return int(match_count.replace(",", "")) if match_count is not None else None
+        return match_count if match_count is not None else None
     
-    def _get_pick_rate(self, soup: BeautifulSoup) -> float | None:
+    def _get_pick_rate(self, soup: BeautifulSoup) -> str | None:
         """Returns pick rate of a champ
 
         Args:
@@ -131,13 +132,13 @@ class WinrateFetcher:
             float | None: Pick rate if found else None
         """
         try:
-            match_count: str = soup.find_all('div', {'class':'text-[20px] max-sm:text-[16px] max-xs:text-[14px] font-extrabold'})[1].text
+            pick_rate: str = soup.find_all('div', {'class':'text-[20px] max-sm:text-[16px] max-xs:text-[14px] font-extrabold'})[1].text
         except IndexError:
             return None
         
-        return float(match_count.rstrip(match_count[-1]))
+        return pick_rate
     
-    def _get_ban_rate(self, soup: BeautifulSoup) -> float | None:
+    def _get_ban_rate(self, soup: BeautifulSoup) -> str | None:
         """Returns ban rate of a champ
 
         Args:
@@ -151,7 +152,7 @@ class WinrateFetcher:
         except IndexError:
             return None
         
-        return float(ban_rate.rstrip(ban_rate[-1]))
+        return ban_rate
 
     def _get_all(self, champ: Champion) -> Result:
         url = self._get_url(champ)
@@ -173,7 +174,7 @@ class WinrateFetcher:
         if not ban_rate:
             self.logger.error(f"Unable to fetch ban_rate for {champ=} with {url=}")
         
-        final_string = f" with {match_count} matches played, a {pick_rate}% pick rate and a {ban_rate}% ban rate"
+        final_string = f" with {match_count} matches played, a {pick_rate} pick rate and a {ban_rate} ban rate"
         self.logger.debug(f"Final string for {champ=} : {final_string}")
         
         result = Result(champ=champ, 
