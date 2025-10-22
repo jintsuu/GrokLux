@@ -32,7 +32,9 @@ class WinrateFetcher:
         
         self.role_list: list[str] = ['top', 'jungle', 'mid', 'adc', 'support']
         
-        self.ugg_div_values = ['shinggo', 'good', 'okay', 'volxd', 'meh', 'great'] # Don't ask
+        self.ugg_div_values: list[str] = ['shinggo', 'good', 'okay', 'volxd', 'meh', 'great'] # Don't ask
+        self.ugg_div_values_reversed: list[str] = list(reversed(self.ugg_div_values))
+        
         
 
     def _get_champion_list(self) -> list[str]:
@@ -94,13 +96,39 @@ class WinrateFetcher:
         win_rate: None | NavigableString = None
         
         for value in self.ugg_div_values:
-            win_rate = soup.find('div', {'class':f'text-[20px] max-sm:text-[16px] max-xs:text-[14px] font-extrabold {value}-tier'}) # type: ignore
+            win_rate = soup.find('div', {'class':f'text-[20px] max-sm:text-[16px] max-xs:text-[14px] font-extrabold {value}-tier'}).text # type: ignore
             self.logger.debug(f"{win_rate=} at ugg value {value}")
             if win_rate is not None:
                 break
-
         
-        return win_rate.text if win_rate is not None else None
+        try:
+            int(win_rate[0]) # type: ignore
+        except (ValueError, TypeError):
+            win_rate = None
+            for value in self.ugg_div_values_reversed:
+                win_rate = soup.find('div', {'class':f'text-[20px] max-sm:text-[16px] max-xs:text-[14px] font-extrabold {value}-tier'}).text # type: ignore
+                self.logger.debug(f"{win_rate=} at ugg value {value}")
+                if win_rate is not None:
+                    break
+        
+        # For finding the value when tier and winrate have the same div value
+        # One of the ugliest functions ever written
+        try:
+            int(win_rate[0]) # type: ignore
+        except (ValueError, TypeError):
+            win_rate = None
+            for value in self.ugg_div_values:
+                win_rate = soup.find_all('div', {'class':f'text-[20px] max-sm:text-[16px] max-xs:text-[14px] font-extrabold {value}-tier'}) # type: ignore
+                try:
+                    int(win_rate[0].text[0]) #type: ignore
+                    win_rate = win_rate[0].text # type: ignore
+                except ValueError:
+                    int(win_rate[1].text[0]) #type: ignore
+                    win_rate = win_rate[1].text # type: ignore
+                except TypeError:
+                    continue
+        
+        return win_rate if win_rate is not None else None
     
     def _get_match_count(self, soup: BeautifulSoup, with_opponent: bool) -> str | None:
         """Returns match count of a champ
