@@ -98,9 +98,9 @@ class WinrateFetcher:
         for value in self.ugg_div_values:
             win_rate = soup.find('div', {'class':f'text-[20px] max-sm:text-[16px] max-xs:text-[14px] font-extrabold {value}-tier'}) # type: ignore
             if win_rate is not None:
-                break
+                win_rate = win_rate.text # type: ignore
+                break        
         
-        win_rate = win_rate.text # type: ignore
         
         try:
             int(win_rate[0]) # type: ignore
@@ -109,11 +109,9 @@ class WinrateFetcher:
             for value in self.ugg_div_values_reversed:
                 win_rate = soup.find('div', {'class':f'text-[20px] max-sm:text-[16px] max-xs:text-[14px] font-extrabold {value}-tier'}) # type: ignore
                 if win_rate is not None:
+                    win_rate = win_rate.text # type: ignore
                     break
                 
-            win_rate = win_rate.text # type: ignore
-                
-        
         
         # For finding the value when tier and winrate have the same div value
         # One of the ugliest functions ever written
