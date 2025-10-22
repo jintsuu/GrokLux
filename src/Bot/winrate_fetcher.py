@@ -96,26 +96,32 @@ class WinrateFetcher:
         win_rate: None | NavigableString = None
         
         for value in self.ugg_div_values:
-            win_rate = soup.find('div', {'class':f'text-[20px] max-sm:text-[16px] max-xs:text-[14px] font-extrabold {value}-tier'}).text # type: ignore
+            win_rate = soup.find('div', {'class':f'text-[20px] max-sm:text-[16px] max-xs:text-[14px] font-extrabold {value}-tier'}) # type: ignore
             self.logger.debug(f"{win_rate=} at ugg value {value}")
             if win_rate is not None:
                 break
         
+        win_rate = win_rate.text # type: ignore
+        
         try:
             int(win_rate[0]) # type: ignore
-        except (ValueError, TypeError):
+        except (ValueError, TypeError, AttributeError):
             win_rate = None
             for value in self.ugg_div_values_reversed:
                 win_rate = soup.find('div', {'class':f'text-[20px] max-sm:text-[16px] max-xs:text-[14px] font-extrabold {value}-tier'}).text # type: ignore
                 self.logger.debug(f"{win_rate=} at ugg value {value}")
                 if win_rate is not None:
                     break
+                
+            win_rate = win_rate.text # type: ignore
+                
+        
         
         # For finding the value when tier and winrate have the same div value
         # One of the ugliest functions ever written
         try:
             int(win_rate[0]) # type: ignore
-        except (ValueError, TypeError):
+        except (ValueError, TypeError, AttributeError):
             win_rate = None
             for value in self.ugg_div_values:
                 win_rate = soup.find_all('div', {'class':f'text-[20px] max-sm:text-[16px] max-xs:text-[14px] font-extrabold {value}-tier'}) # type: ignore
@@ -127,6 +133,8 @@ class WinrateFetcher:
                     win_rate = win_rate[1].text # type: ignore
                 except TypeError:
                     continue
+            
+            win_rate = win_rate.text # type: ignore
         
         return win_rate if win_rate is not None else None
     
