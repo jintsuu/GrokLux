@@ -1,4 +1,4 @@
-helpmsg = """
+HELPMESSAGE: str = """
 All commands are case-sensitive.
 
 +help (menu) -  Displays this help menu in DMs. Structured: +command (aliases) | (arguments)  -  Explanation
@@ -23,7 +23,7 @@ GwenBot is open source, you can find all code on <https://github.com/Zexsch/Gwen
 """
 
 
-wrhelpmsg = """
+WRHELPMESSAGE: str = """
 +wr (winrate) | (champion)  -  Gives the winrate of the given champion.
 Optional parameters:
 elo, role, opposing champ
